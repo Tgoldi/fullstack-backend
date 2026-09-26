@@ -18,6 +18,18 @@ public class UserController {
 
     @PostMapping("/user")
     User newUser(@RequestBody User newUser){
+        if (newUser.getUsername() == null || newUser.getUsername().trim().isEmpty()
+                || newUser.getUsername().length() > 100) {
+            throw new IllegalArgumentException("Username is required and must be at most 100 characters.");
+        }
+        if (newUser.getName() == null || newUser.getName().trim().isEmpty()
+                || newUser.getName().length() > 100) {
+            throw new IllegalArgumentException("Name is required and must be at most 100 characters.");
+        }
+        if (newUser.getEmail() == null || newUser.getEmail().trim().isEmpty()
+                || !newUser.getEmail().matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            throw new IllegalArgumentException("A valid email is required.");
+        }
         return userRepository.save(newUser);
     }
 
@@ -33,6 +45,18 @@ public class UserController {
     }
     @PutMapping("/user/{id}")
     User updateUser(@RequestBody User newUser,@PathVariable Long id){
+        if (newUser.getUsername() == null || newUser.getUsername().trim().isEmpty()
+                || newUser.getUsername().length() > 100) {
+            throw new IllegalArgumentException("Username is required and must be at most 100 characters.");
+        }
+        if (newUser.getName() == null || newUser.getName().trim().isEmpty()
+                || newUser.getName().length() > 100) {
+            throw new IllegalArgumentException("Name is required and must be at most 100 characters.");
+        }
+        if (newUser.getEmail() == null || newUser.getEmail().trim().isEmpty()
+                || !newUser.getEmail().matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            throw new IllegalArgumentException("A valid email is required.");
+        }
         return userRepository.findById(id)
                 .map(user -> {
                     user.setUsername(newUser.getUsername());
