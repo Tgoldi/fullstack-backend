@@ -18,6 +18,7 @@ public class UserController {
 
     @PostMapping("/user")
     User newUser(@RequestBody User newUser){
+        newUser.setId(null);
         return userRepository.save(newUser);
     }
 
