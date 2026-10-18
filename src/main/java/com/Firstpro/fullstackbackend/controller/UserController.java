@@ -18,12 +18,20 @@ public class UserController {
 
     @PostMapping("/user")
     User newUser(@RequestBody User newUser){
-        return userRepository.save(newUser);
+        User toCreate = new User();
+        toCreate.setId(null);
+        toCreate.setUsername(newUser.getUsername());
+        toCreate.setName(newUser.getName());
+        toCreate.setEmail(newUser.getEmail());
+        return userRepository.save(toCreate);
     }
 
     @GetMapping("/users")
-    List<User> getAllUsers(){
-        return userRepository.findAll();
+    List<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "20") int size){
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+        return userRepository.findAll(org.springframework.data.domain.PageRequest.of(safePage, safeSize)).getContent();
     }
 
     @GetMapping("/user/{id}")
